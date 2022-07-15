@@ -5,14 +5,13 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lethuccrma/todoapp-be.git"
+    "url": "git+https://github.com/lethuccrma/todoapp-fe.git"
   },
   "author": "Thuc Le & Duong Nguyen",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/lethuccrma/todoapp-be/issues"
+    "url": "https://github.com/lethuccrma/todoapp-fe/issues"
   },
-  "homepage": "https://github.com/lethuccrma/todoapp-be#readme",
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "@testing-library/jest-dom": "^5.14.1",
