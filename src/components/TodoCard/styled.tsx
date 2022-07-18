@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const PostCardStyled = styled.div`
+export const TodoCardStyled = styled.div`
   width: 300px;
   display: flex;
   flex-direction: column;

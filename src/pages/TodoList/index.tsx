@@ -1,11 +1,8 @@
-import React, { useContext, useState } from 'react';
-import PostCard from '../..//components/PostCard';
-import { Badge, Button, Form, Input, Modal } from 'antd';
+import React, { useCallback, useState } from 'react';
+import { Button, Form, Input, Modal } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import _ from 'lodash';
 import { ICardData } from '../../types/ICard';
-import { AppContext } from '../../App';
-// import _ from 'lodash';
 
 const { Search } = Input;
 
@@ -13,20 +10,19 @@ const dummyData = (() => {
   const array = Array<ICardData>(10).fill({
     id: '-1',
     title: 'none',
-    body: 'none'
+    body: 'none',
   });
 
   return array.map(
     (v, ind): ICardData => ({
       id: ind.toString(),
       title: 'dummy title',
-      body: 'dummy body'
-    })
+      body: 'dummy title',
+    }),
   );
 })();
 
-function PostList () {
-  const { loading, search, setData, filteredData, setFilteredData, favoriteIds } = useContext(AppContext);
+function TodoList() {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [form] = Form.useForm();
@@ -39,89 +35,42 @@ function PostList () {
 
   const handleAddCardSubmit = ({
     title,
-    body
+    body,
   }: {
     title: string;
     body: string;
   }) => {
-    setFilteredData((pre) => [
-      {
-        id: new Date().getTime().toString(),
-        title,
-        body
-      },
-      ...pre
-    ]);
-    setData((pre) => [
-      {
-        id: new Date().getTime().toString(),
-        title,
-        body
-      },
-      ...pre
-    ]);
+    // TODO: add todo card
     setModalVisible(false);
   };
+
+  const search = (txt: string) => console.log(txt);
+
+  const debounceSearch = useCallback(_.debounce(search, 500), []);
 
   return (
     <div className="flex flex-col items-center py-5">
       <Search
         style={{
-          width: '500px'
+          width: '500px',
         }}
         placeholder="Wanna search something for your boring life?"
         onSearch={search}
-        onChange={(event) => _.debounce(search, 500)(event.target.value)}
+        onChange={(event: any) => debounceSearch(event.target.value)}
       />
-      {/* <Button
-        style={{
-          marginTop: 20
-        }}
-        type="primary"
-        loading={loading}
-        ghost={true}
-        onClick={refresh}
-      >
-        Refresh
-      </Button> */}
       <Button
         style={{
-          marginTop: 20
+          marginTop: 20,
         }}
-        loading={loading}
+        loading={false}
         type="primary"
-        ghost={true}
+        ghost
         onClick={() => setModalVisible(true)}
       >
-        Add more card
+        Add more todo
       </Button>
-      <div
-        style={{
-          position: 'absolute',
-          top: 20,
-          right: 20
-        }}
-      >
-        <Badge size="default" count={favoriteIds.length}>
-          <Button
-            type="primary"
-            ghost={true}
-            onClick={() => navigator('/favorite')}
-          >
-            Favorite
-          </Button>
-        </Badge>
-      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 p-5">
-        {(loading ? dummyData : filteredData.slice(0, 10)).map((card) => (
-          <PostCard
-            key={card.id}
-            id={card.id}
-            title={card.title}
-            body={card.body}
-            loading={loading}
-          />
-        ))}
+        {/* TODO: Todo card */}
       </div>
 
       <Modal
@@ -160,4 +109,4 @@ function PostList () {
   );
 }
 
-export default PostList;
+export default TodoList;
