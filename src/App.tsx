@@ -5,6 +5,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import TodoList from './pages/TodoList';
 import { persistor, store } from './redux/store';
 import Login from './pages/Login';
+import Signup from './pages/Signup';
 import { useSelector } from 'react-redux';
 import { AuthState } from './redux/auth/auth.slice';
 
@@ -22,6 +23,7 @@ function Router() {
     <Routes>
       <Route path="/" element={<TodoList />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
     </Routes>
   );
 }
