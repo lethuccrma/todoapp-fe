@@ -1,5 +1,8 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import AuthSlice, { AuthState } from '../../redux/auth/auth.slice';
 import './index.css';
 
 interface IFormInputs {
@@ -7,16 +10,19 @@ interface IFormInputs {
   password: string;
 }
 
-const onSubmit = (data: IFormInputs) => {
-  console.log(data);
-};
 
 export default function index () {
   const {
     register,
-    handleSubmit,
-    formState: { errors }
-  } = useForm<IFormInputs>();
+    handleSubmit  } = useForm<IFormInputs>();
+
+  const dispatch = useDispatch();
+  const authState = useSelector<{auth: AuthState}, AuthState>((state) => state.auth);
+
+  const onSubmit = (data: IFormInputs) => {
+    dispatch(AuthSlice.actions.startLogin(data))
+  };
+
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

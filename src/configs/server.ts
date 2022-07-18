@@ -1,4 +1,4 @@
-export const ROOT_ENDPOINT = 'localhost:3000';
+export const ROOT_ENDPOINT = 'http://localhost:3001';
 
-export const LOGIN = '/login';
-export const SIGNUP = '/signup';
+export const LOGIN = '/auth/login';
+export const SIGNUP = '/auth/signup';
