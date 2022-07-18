@@ -3,11 +3,13 @@ import { useForm } from 'react-hook-form';
 import './index.css';
 
 interface IFormInputs {
-  firstName: string;
-  lastName: string;
-  isDeveloper: boolean;
   email: string;
+  password: string;
 }
+
+const onSubmit = (data: IFormInputs) => {
+  console.log(data);
+};
 
 export default function index () {
   const {
@@ -16,39 +18,21 @@ export default function index () {
     formState: { errors }
   } = useForm<IFormInputs>();
 
-  const onSubmit = (data: IFormInputs) => {
-    console.log(data);
-  };
-
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div>
-        <label>First Name</label>
-        <input {...register('firstName')} placeholder="Kotaro" />
-        {errors?.firstName && <p>{errors.firstName.message}</p>}
-      </div>
-
-      <div>
-        <label>Last Name</label>
-        <input {...register('lastName')} placeholder="Sugawara" />
-      </div>
-
-      <div>
-        <label htmlFor="isDeveloper">Is an developer?</label>
-        <input
-          type="checkbox"
-          {...register('isDeveloper')}
-          placeholder="luo"
-          value="yes"
-        />
-      </div>
-
       <div>
         <label htmlFor="email">Email</label>
         <input
           {...register('email')}
-          placeholder="bluebill1049@hotmail.com"
+          placeholder="example@gmail.com"
           type="email"
+        />
+      </div>
+      <div>
+        <label htmlFor="password">Password</label>
+        <input
+          {...register('password')}
+          type="password"
         />
       </div>
       <input type="submit" />

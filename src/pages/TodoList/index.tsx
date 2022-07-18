@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { Button, Form, Input, Modal } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import _ from 'lodash';
-import { ICardData } from '../../types/ICard';
+import { CardStatus, ICardData } from '../../types/ICard';
 
 const { Search } = Input;
 
@@ -10,14 +10,19 @@ const dummyData = (() => {
   const array = Array<ICardData>(10).fill({
     id: '-1',
     title: 'none',
-    body: 'none',
+    content: 'none',
+    createdBy: 'none',
+    category: "none",
+    status: CardStatus.OPEN,
+    dueDate: new Date(),
+    updatedAt: new Date(),
+    deletedAt: new Date()
   });
 
   return array.map(
     (v, ind): ICardData => ({
+      ...v,
       id: ind.toString(),
-      title: 'dummy title',
-      body: 'dummy title',
     }),
   );
 })();
