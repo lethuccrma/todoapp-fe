@@ -24,12 +24,17 @@ export default function index() {
     dispatch(AuthSlice.actions.startLogin(data));
   };
 
+  // useEffect(() => {
+  //   authState.
+  // }, []);
+
   useEffect(() => {
     if (authState.loginError) {
       setShowError(true);
       setTimeout(() => setShowError(false), 3000);
     }
   }, [authState.loginError]);
+
   useEffect(() => {
     if (authState.authenticated) navigate('/');
   }, [authState.authenticated]);
@@ -94,7 +99,7 @@ export default function index() {
           >
             Log in
           </Button>
-          Or <a href="">register now!</a>
+          Or <a href="/signup">register now!</a>
         </Form.Item>
       </Form>
     </div>
