@@ -44,7 +44,6 @@ export default function index() {
       <Form
         name="normal_login"
         className="login-form min-w-[25%]"
-        initialValues={{ remember: true }}
         onFinish={onFinish}
       >
         <Typography>Your email:</Typography>
