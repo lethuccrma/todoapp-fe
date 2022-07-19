@@ -16,7 +16,7 @@ function Router() {
   console.log(authState);
 
   useEffect(() => {
-    if (!authState.authenticated) {
+    if (!authState.authenticated && window.location.pathname !== '/signup') {
       navigate('/login');
     }
   }, [authState.authenticated])

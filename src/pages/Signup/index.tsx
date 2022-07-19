@@ -1,29 +1,44 @@
-import { Button, Col, Form, Input, Row, Space } from 'antd';
-import React, { useState } from 'react';
+import { Button, Col, Form, Input, Row, Space, Typography } from 'antd';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 import './index.css';
 import UnauthorizedAPI from '../../apis/unauthorized';
 import { SIGNUP } from '../../configs/server';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { AuthState } from '../../redux/auth/auth.slice';
 
 export default function index() {
   const [form] = Form.useForm();
 
   const [onLoading, setOnLoading] = useState(false);
+  
   const [ErrorText, setErrorText] = useState('');
+  const [showErrorText, setShowErrorText] = useState(false);
 
+  const authState = useSelector<{ auth: AuthState }, AuthState>(
+    (state) => state.auth,
+  );
 
+  useEffect(() => {
+    if (ErrorText) {
+      setShowErrorText(true);
+      setTimeout(() => {setShowErrorText(false); setErrorText('')}, 3000);
+    }
+  }, [ErrorText]);
+
+  const navigate = useNavigate();
   const onFinish = (values: any) => {
-    console.log('Received values of form: ', values);
     const { email, password, firstName, lastName } = values;
     setOnLoading(true);
     UnauthorizedAPI.post(SIGNUP, { email, password, firstName, lastName })
       .then((res) =>{
         setErrorText('');
-        console.log(res);
+        navigate('/login');
       })
       .catch((err) => {
-        setErrorText(err.message);
+        setErrorText(err.response.data.message || err.message);
       })
       .finally(() => {
         setOnLoading(false);
@@ -31,14 +46,14 @@ export default function index() {
   };
 
   return (
-    <div className="flex-1 h-screen w-screen justify-center items-center">
+    <div className="flex h-screen w-screen justify-center	 items-center">
       <Form
         form={form}
         name="register"
         onFinish={onFinish}
         initialValues={{ remember: true }}
         scrollToFirstError
-        className="flex-auto flex-col justify-between"
+        className="signup-form min-w-[40%]"
       >
         <Row gutter={24}>
           <Col span={12}>
@@ -115,6 +130,15 @@ export default function index() {
         >
           <Input.Password placeholder="Confirm Password" />
         </Form.Item>
+
+        {showErrorText ? (
+          <Typography style={{ color: 'red', marginBottom: 10 }}>
+            {ErrorText}
+          </Typography>
+        ) : (
+          <div></div>
+        )}
+        
         <Form.Item>
           <Button
             type="primary"
