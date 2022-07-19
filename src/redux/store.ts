@@ -20,6 +20,7 @@ function configStore(preloadedState: any) {
     key: 'root',
     storage,
     blacklist: ['auth'],
+    whitelist: ['user'],
   };
 
   const persistedReducer = persistReducer(persistConfig, rootReducer);

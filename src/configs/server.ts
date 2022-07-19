@@ -6,3 +6,5 @@ export const GET_TODOS = '/todo';
 export const ADD_TODO = '/todo';
 export const EDIT_TODO = '/todo';
 export const DELETE_TODO = '/todo';
+export const GET_USER = '/user';
+export const GET_FILE = '/file';

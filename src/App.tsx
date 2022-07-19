@@ -9,6 +9,7 @@ import Signup from './pages/Signup';
 import { useSelector } from 'react-redux';
 import { AuthState } from './redux/auth/auth.slice';
 import './index.css';
+import User from './pages/User';
 
 function Router() {
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ function Router() {
       <Route path="/" element={<TodoList />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path="/user" element={<User />} />
     </Routes>
   );
 }
