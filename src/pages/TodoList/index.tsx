@@ -3,6 +3,8 @@ import { Button, Form, Input, Modal } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import _ from 'lodash';
 import { CardStatus, ICardData } from '../../types/ICard';
+import useTodos from './hook';
+import TodoCard from '../../components/TodoCard';
 
 const { Search } = Input;
 
@@ -31,8 +33,7 @@ function TodoList() {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [form] = Form.useForm();
-
-  const navigator = useNavigate();
+  const [page, setPage] = useState(1);
 
   const handleAddCard = () => {
     form.submit();
@@ -49,8 +50,11 @@ function TodoList() {
     setModalVisible(false);
   };
 
-  const search = (txt: string) => console.log(txt);
+  /* Fetching todo */
+  const {todos, loading, error, refetch, pagination} = useTodos({page, take: 100});
 
+  /* Search */
+  const search = (txt: string) => console.log(txt);
   const debounceSearch = useCallback(_.debounce(search, 500), []);
 
   return (
@@ -75,7 +79,7 @@ function TodoList() {
         Add more todo
       </Button>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 p-5">
-        {/* TODO: Todo card */}
+        {loading ? dummyData.map((v) => <TodoCard key={v.id} {...v} loading={true} />) : todos.map((v) => <TodoCard key={v.id} {...v} loading={false} />)}
       </div>
 
       <Modal

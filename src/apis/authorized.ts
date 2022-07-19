@@ -25,6 +25,7 @@ const errorHandler = (error: AxiosError) => {
   return Promise.reject(error);
 };
 
-AuthorizedAPI.interceptors.request.use(requestHandler, errorHandler);
+AuthorizedAPI.interceptors.request.use(requestHandler, (error) => Promise.reject(error));
+AuthorizedAPI.interceptors.response.use((response) => response, errorHandler);
 
 export default AuthorizedAPI;
