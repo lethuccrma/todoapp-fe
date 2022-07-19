@@ -22,11 +22,10 @@ function* handleStartLogin(
       },
     );
     const { token, user } = response.data || {};
-
     yield put(AuthSlice.actions.loginSuccess(token));
     yield put(UserSlice.actions.setUser(user))
   } catch (err) {
-    const errorMessage = (err as AxiosError<{message: string}>)?.response?.data.message || (err as Error).message;
+    const errorMessage = (err as AxiosError<{message: string}>)?.response?.data?.message || (err as Error).message;
     console.log('ERROR', errorMessage);
     yield put(AuthSlice.actions.loginFailed({ message: errorMessage }));
   }
