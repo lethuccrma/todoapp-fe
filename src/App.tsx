@@ -8,6 +8,7 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import { useSelector } from 'react-redux';
 import { AuthState } from './redux/auth/auth.slice';
+import './index.css';
 
 function Router() {
   const navigate = useNavigate();
