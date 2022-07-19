@@ -13,7 +13,7 @@ export default function index() {
   const [form] = Form.useForm();
 
   const [onLoading, setOnLoading] = useState(false);
-  
+
   const [ErrorText, setErrorText] = useState('');
   const [showErrorText, setShowErrorText] = useState(false);
 
@@ -24,16 +24,23 @@ export default function index() {
   useEffect(() => {
     if (ErrorText) {
       setShowErrorText(true);
-      setTimeout(() => {setShowErrorText(false); setErrorText('')}, 3000);
+      setTimeout(() => {
+        setShowErrorText(false);
+        setErrorText('');
+      }, 3000);
     }
   }, [ErrorText]);
+
+  useEffect(() => {
+    if (authState.authenticated) navigate('/');
+  }, [authState.authenticated]);
 
   const navigate = useNavigate();
   const onFinish = (values: any) => {
     const { email, password, firstName, lastName } = values;
     setOnLoading(true);
     UnauthorizedAPI.post(SIGNUP, { email, password, firstName, lastName })
-      .then((res) =>{
+      .then((res) => {
         setErrorText('');
         navigate('/login');
       })
@@ -42,7 +49,7 @@ export default function index() {
       })
       .finally(() => {
         setOnLoading(false);
-      })
+      });
   };
 
   return (
@@ -138,7 +145,7 @@ export default function index() {
         ) : (
           <div></div>
         )}
-        
+
         <Form.Item>
           <Button
             type="primary"
