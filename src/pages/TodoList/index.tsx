@@ -18,7 +18,7 @@ const dummyData = (() => {
     status: CardStatus.OPEN,
     dueDate: new Date(),
     updatedAt: new Date(),
-    deletedAt: new Date()
+    createdAt: new Date()
   });
 
   return array.map(

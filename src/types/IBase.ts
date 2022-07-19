@@ -1,7 +1,7 @@
 type IBase = {
   id: string;
   updatedAt: Date;
-  deletedAt: Date;
+  createdAt: Date;
 }
 
 export default IBase;

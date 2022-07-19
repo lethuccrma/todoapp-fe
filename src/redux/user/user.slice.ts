@@ -4,7 +4,7 @@ import IUser from '../../types/IUser';
 const initialState: IUser = {
   id: '',
   updatedAt: new Date(),
-  deletedAt: new Date(),
+  createdAt: new Date(),
   email: '',
   firstName: '',
   lastName: '',
