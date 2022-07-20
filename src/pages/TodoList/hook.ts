@@ -14,11 +14,11 @@ function useTodos({
   const [error, setError] = useState<string>();
   const [pagination, setPagination] = useState<{haveNextPage: boolean; total: number}>({haveNextPage: false, total: 0});
 
-  const fetchTodos = useCallback((preventSetLoading = false) => {
+  const fetchTodos = useCallback((preventSetLoading = false, search = '') => {
     if (!preventSetLoading) {
       setLoading(true);
     }
-    AuthorizedAPI.get<{data: {todos: ICardData[]; pagination: IPagination}}>(`${GET_TODOS}?${qs.stringify({page, take})}`)
+    AuthorizedAPI.get<{data: {todos: ICardData[]; pagination: IPagination}}>(`${GET_TODOS}?${qs.stringify({page, take, search})}`)
       .then((result) => {
         setTodos(result.data.data.todos);
         setPagination(result.data.data.pagination);

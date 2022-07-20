@@ -131,7 +131,9 @@ function TodoList() {
   });
 
   /* Search */
-  const search = (txt: string) => console.log(txt);
+  const search = (txt: string) => {
+    refetch(false, txt);
+  };
   const debounceSearch = useCallback(_.debounce(search, 500), []);
 
   return (
