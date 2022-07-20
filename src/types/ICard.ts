@@ -6,11 +6,10 @@ export enum CardStatus {
 }
 
 export type ICardData = IBase & {
-  id: string;
   title: string;
   content: string;
   createdBy: string;
-  category: string;
+  categories: string;
   status: CardStatus;
   dueDate: Date;
 };
