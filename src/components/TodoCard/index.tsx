@@ -63,7 +63,7 @@ const TodoCard: React.FC<
   return loading ? (
     <Card loading={loading} style={{ width: 300 }} />
   ) : (
-    <TodoCardStyled>
+    <TodoCardStyled className={status === CardStatus.COMPLETED ? 'border-green-500 bg-green-100' : 'border-slate-800'}>
       <div>
         <p className="title">{title}</p>
         <p className="body">{content}</p>
@@ -88,8 +88,8 @@ const TodoCard: React.FC<
           {moment(dueDate).format('MM/DD/YYYY')}
         </div>
         <div className="flex text-sm">
-          <Button onClick={handleDeleteClick} icon={<DeleteFilled className='text-red-400' />} className="border-none" />
-          <Button onClick={handleEditClick} icon={<EditFilled />} className="border-none ml-2" />
+          <Button onClick={handleDeleteClick} icon={<DeleteFilled className='text-red-400' />} className="border-none bg-transparent  hover:bg-transparent" />
+          <Button onClick={handleEditClick} icon={<EditFilled />} className="border-none bg-transparent ml-2  hover:bg-transparent" />
           <Button
             onClick={handleCompleteClick}
             icon={
@@ -99,7 +99,7 @@ const TodoCard: React.FC<
                 <CheckOutlined />
               )
             }
-            className="border-none ml-2"
+            className="border-none ml-2 bg-transparent hover:bg-transparent"
           />
         </div>
       </div>

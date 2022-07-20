@@ -6,7 +6,8 @@ export const TodoCardStyled = styled.div`
   flex-direction: column;
   justify-content: space-between;
   padding: 15px;
-  border: solid 1px #777;
+  border-style: solid;
+  border-width: 1px;
   cursor: pointer;
   transition: all .2s;
 

@@ -22,7 +22,6 @@ function useTodos({
       .then((result) => {
         setTodos(result.data.data.todos);
         setPagination(result.data.data.pagination);
-        console.log(result.data.data.pagination);
       })
       .catch(err => {
         setError(err?.response?.data?.message || err.message)
