@@ -1,15 +1,17 @@
-import { DatePicker, Form, Input, Modal, Select, Tag } from 'antd';
-import React from 'react';
+import { DatePicker, Form, Input, Modal, Select, Tag, Typography } from 'antd';
+import React, { useEffect } from 'react';
 import { ICardData } from '../../types/ICard';
 import { TodoModalStyled } from './styled';
 import type { CustomTagProps } from 'rc-select/lib/BaseSelect';
 import moment, { Moment } from 'moment';
 
-const options = [
+const { Text } = Typography;
+
+export const options = [
   { value: 'work', color: 'gold', label: 'Work' },
   { value: 'study', color: 'lime', label: 'Study' },
   { value: 'relax', color: 'green', label: 'Relax' },
-  { value: 'heath', color: 'cyan', label: 'Heath' },
+  { value: 'health', color: 'cyan', label: 'Health' },
 ];
 const tagRender = (props: CustomTagProps & { color?: string }) => {
   const { label, value, closable, onClose } = props;
@@ -31,15 +33,32 @@ const tagRender = (props: CustomTagProps & { color?: string }) => {
 };
 
 export type ICardForm = {
-  title: string; content: string; dueDate: Moment; categories: string[];
-}
+  id?: string;
+  title: string;
+  content: string;
+  dueDate: Moment;
+  categories: string[];
+};
 
 const TodoModal: React.FC<{
   onSubmit: (value: ICardForm) => void;
   onClose: () => void;
   initialValues: ICardData;
   modalVisible: boolean;
-}> = ({ onClose, onSubmit, initialValues, modalVisible }) => {
+  loading: boolean;
+  header: string;
+  error: string;
+  todoId?: string;
+}> = ({
+  onClose,
+  onSubmit,
+  initialValues,
+  modalVisible,
+  loading,
+  error,
+  header,
+  todoId
+}) => {
   const [form] = Form.useForm();
 
   const handleOkPress = () => {
@@ -47,19 +66,21 @@ const TodoModal: React.FC<{
   };
 
   const handleFormSubmit = (value: ICardForm) => {
-    onSubmit(value);
-  }
+    onSubmit({...value, id: todoId});
+  };
+
+  useEffect(() => form.resetFields(), [initialValues]);
 
   return (
     <TodoModalStyled>
       <Modal
-        title="New Card"
+        title={header}
         visible={modalVisible}
         onOk={handleOkPress}
         onCancel={onClose}
         okButtonProps={{ ghost: true, type: 'primary' }}
         cancelButtonProps={{ danger: true, type: 'primary' }}
-        afterClose={() => form.resetFields()}
+        confirmLoading={loading}
       >
         <Form
           name="basic"
@@ -72,7 +93,9 @@ const TodoModal: React.FC<{
             title: initialValues.title,
             content: initialValues.content,
             dueDate: moment(initialValues.dueDate),
-            categories: initialValues.categories.split(',').filter((s) => s.length > 0),
+            categories: initialValues.categories
+              ?.split(',')
+              .filter((s) => s.length > 0),
           }}
         >
           <Form.Item
@@ -105,6 +128,7 @@ const TodoModal: React.FC<{
             />
           </Form.Item>
         </Form>
+        <Text className="text-red-500">{error}</Text>
       </Modal>
     </TodoModalStyled>
   );

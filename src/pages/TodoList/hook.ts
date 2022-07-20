@@ -14,13 +14,15 @@ function useTodos({
   const [error, setError] = useState<string>();
   const [pagination, setPagination] = useState<{haveNextPage: boolean; total: number}>({haveNextPage: false, total: 0});
 
-  const fetchTodos = useCallback(() => {
-    setLoading(true);
-    AuthorizedAPI.get<{data: {todos: ICardData[]}; pagination: IPagination}>(`${GET_TODOS}?${qs.stringify({page, take})}`)
+  const fetchTodos = useCallback((preventSetLoading = false) => {
+    if (!preventSetLoading) {
+      setLoading(true);
+    }
+    AuthorizedAPI.get<{data: {todos: ICardData[]; pagination: IPagination}}>(`${GET_TODOS}?${qs.stringify({page, take})}`)
       .then((result) => {
-        console.log('result', result);
         setTodos(result.data.data.todos);
-        setPagination(result.data.pagination);
+        setPagination(result.data.data.pagination);
+        console.log(result.data.data.pagination);
       })
       .catch(err => {
         setError(err?.response?.data?.message || err.message)

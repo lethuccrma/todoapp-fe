@@ -13,7 +13,6 @@ import './index.css';
 function Router() {
   const navigate = useNavigate();
   const authState = useSelector<{auth: AuthState}, AuthState>((state) => state.auth);
-  console.log(authState);
 
   useEffect(() => {
     if (!authState.authenticated) {
