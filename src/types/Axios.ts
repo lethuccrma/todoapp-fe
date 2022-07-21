@@ -10,3 +10,7 @@ export type LoginResponse = {
   token: IToken;
   user: IUser;
 }
+
+export type UpdateUserResponse = {
+  user: IUser;
+}

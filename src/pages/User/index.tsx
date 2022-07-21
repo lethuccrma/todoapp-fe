@@ -169,6 +169,11 @@ function EditInfoModal(props: {
   oldLastName: string;
 }) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const authState = useSelector<{ auth: AuthState }, AuthState>(
+    (state) => state.auth,
+  );
 
   const [editInfoForm] = Form.useForm();
   const { onEditingInfo, setOnEditingInfo, oldFirstName, oldLastName } = props;
@@ -203,15 +208,22 @@ function EditInfoModal(props: {
       lastName,
     })
       .then((res) => {
-        console.log(res.data);
+        console.log('data ne', res.data);
 
-        UserSlice.actions.setUser(res.data.user);
+        const userInfo = {
+          ...res.data.user,
+          avatarURL: `${ROOT_ENDPOINT}${GET_FILE}/${
+            res.data.user.avatar
+          }?token=Bearer ${authState.token}`,
+        }
+
+        dispatch(UserSlice.actions.setUser(userInfo));
 
         setErrorText('');
         setOnEditingInfo(false);
       })
       .catch((err) => {
-        setErrorText(err.response.data.message || err.message);
+        setErrorText(err?.response?.data?.message || err.message);
       })
       .finally(() => {
         setOnLoading(false);
@@ -273,37 +285,10 @@ const handleUpload = (file: UploadFile) => {
   });
 };
 
-const ChangeAvatarProps: UploadProps = {
-  name: 'avatar',
-  showUploadList: false,
-  onChange(info) {
-    if (info.file.status !== 'uploading') {
-      console.log(info.file, info.fileList);
-    }
-    if (info.file.status === 'done') {
-      console.log(`${info.file.name} file uploaded successfully`);
-    } else if (info.file.status === 'error') {
-      console.log(`${info.file.name} file upload failed.`);
-    }
-  },
-  beforeUpload: (file: UploadFile) => {
-    handleUpload(file);
-    return true;
-  },
-  onPreview: async (file: UploadFile) => {
-    let src = file.url as string;
-    if (!src) {
-      src = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file.originFileObj as RcFile);
-        reader.onload = () => resolve(reader.result as string);
-      });
-    }
-    const image = new Image();
-    image.src = src;
-    const imgWindow = window.open(src);
-    imgWindow?.document.write(image.outerHTML);
-  },
+const getBase64 = (img: RcFile, callback: (url: string) => void) => {
+  const reader = new FileReader();
+  reader.addEventListener('load', () => callback(reader.result as string));
+  reader.readAsDataURL(img);
 };
 
 export default function index() {
@@ -328,7 +313,13 @@ export default function index() {
       .then((res) => {
         console.log(res.data.user);
         setErrorText('');
-        dispatch(UserSlice.actions.setUser(res.data.user));
+        const userInfo = {
+          ...res.data.user,
+          avatarURL: `${ROOT_ENDPOINT}${GET_FILE}/${
+            res.data.user.avatar
+          }?token=Bearer ${authState.token}`,
+        }
+        dispatch(UserSlice.actions.setUser(userInfo));
       })
       .catch((err) => {
         setErrorText(err.response.data.message || err.message);
@@ -337,6 +328,36 @@ export default function index() {
         setOnLoading(false);
       });
   }, []);
+
+  const ChangeAvatarProps: UploadProps = {
+    name: 'avatar',
+    showUploadList: false,
+    beforeUpload: (file: UploadFile) => {
+      getBase64(file as RcFile, (url) => {
+        file.url = url;
+        dispatch(UserSlice.actions.updateAvatarURL(file));
+      });
+      return false;
+    },
+    onPreview: async (file: UploadFile) => {
+      let src = file.url as string;
+      if (!src) {
+        src = await new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(file.originFileObj as RcFile);
+          reader.onload = () => resolve(reader.result as string);
+        });
+      }
+      const image = new Image();
+      image.src = src;
+      const imgWindow = window.open(src);
+      imgWindow?.document.write(image.outerHTML);
+    },
+  };
+
+  useEffect(() => {
+    form.resetFields();
+  }, [userState])
 
   return (
     <div className="flex flex-col h-screen w-screen justify-center items-center">
@@ -350,14 +371,14 @@ export default function index() {
         <EditInfoModal
           onEditingInfo={onEditingInfo}
           setOnEditingInfo={setOnEditingInfo}
-          oldFirstName={userState.firstName}
-          oldLastName={userState.lastName}
+          oldFirstName={userState.firstName || ''}
+          oldLastName={userState.lastName || ''}
         />
       ) : null}
       <ImageAnt
         className="mb-4"
         width={200}
-        src={`${ROOT_ENDPOINT}${GET_FILE}/${userState.avatar}?token=Bearer ${authState.token}`}
+        src={userState.avatarURL}
         fallback={require('./BlankImage.png')}
         placeholder={
           <ImageAnt

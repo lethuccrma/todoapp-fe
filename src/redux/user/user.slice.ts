@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { UploadFile } from 'antd/lib/upload/interface';
 import IUser from '../../types/IUser';
 
 const initialState: IUser = {
@@ -9,6 +10,7 @@ const initialState: IUser = {
   firstName: '',
   lastName: '',
   avatar: '',
+  avatarURL: undefined,
 };
 
 export const UserSlice = createSlice({
@@ -16,6 +18,8 @@ export const UserSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action: PayloadAction<IUser>) => (action.payload),
+    updateAvatarURL: (state, action: PayloadAction<UploadFile>) => ({...state, avatarURL: action.payload.url}),
+    updateUser: (state, action: PayloadAction<IUser>) => ({...state, ...action.payload}),
   },
 });
 
