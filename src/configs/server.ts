@@ -9,3 +9,4 @@ export const DELETE_TODO = '/todo';
 export const GET_USER = '/user';
 export const GET_FILE = '/file';
 export const CHANGE_PASSWORD = '/user';
+export const EDIT_USER = '/user';

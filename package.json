@@ -24,6 +24,7 @@
     "@types/react-dom": "^18.0.0",
     "@types/styled-components": "^5.1.25",
     "antd": "^4.21.3",
+    "antd-img-crop": "^4.2.3",
     "autoprefixer": "^10.4.7",
     "axios": "^0.27.2",
     "eslint-config-airbnb": "^19.0.4",
