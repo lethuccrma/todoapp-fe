@@ -3,10 +3,12 @@ import { call, put, takeLatest } from 'redux-saga/effects';
 import AuthSlice from './auth.slice';
 import AuthorizedAPI from '../../apis/authorized';
 import { LOGIN } from '../../configs/server';
-import { PayloadAction } from '@reduxjs/toolkit';
+import { createAction, PayloadAction } from '@reduxjs/toolkit';
 import { AxiosError, AxiosResponse } from 'axios';
 import { LoginResponse } from '../../types/Axios';
 import UserSlice from '../user/user.slice';
+
+export const LOGOUT = createAction('LOGOUT');
 
 function* handleStartLogin(
   action: PayloadAction<{ email: string; password: string }>,
@@ -31,6 +33,12 @@ function* handleStartLogin(
   }
 }
 
+function* handleLogout() {
+  yield put(AuthSlice.actions.logout());
+  yield put(UserSlice.actions.resetUser());
+}
+
 export default function* AuthSaga() {
   yield takeLatest(AuthSlice.actions.startLogin.type, handleStartLogin);
+  yield takeLatest(LOGOUT.type, handleLogout);
 }

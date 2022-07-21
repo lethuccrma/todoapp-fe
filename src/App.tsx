@@ -10,14 +10,20 @@ import { useSelector } from 'react-redux';
 import { AuthState } from './redux/auth/auth.slice';
 import './index.css';
 import User from './pages/User';
+import { useDispatch } from 'react-redux';
+import { FETCH_USER } from './redux/user/user.saga';
 
 function Router() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const authState = useSelector<{auth: AuthState}, AuthState>((state) => state.auth);
 
   useEffect(() => {
     if (!authState.authenticated && window.location.pathname !== '/signup') {
       navigate('/login');
+    }
+    if (authState.authenticated) {
+      dispatch(FETCH_USER());
     }
   }, [authState.authenticated])
   return (

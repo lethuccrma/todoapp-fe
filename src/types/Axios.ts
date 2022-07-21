@@ -14,3 +14,7 @@ export type LoginResponse = {
 export type UpdateUserResponse = {
   user: IUser;
 }
+
+export type GetUserResponse = {
+  user: IUser;
+}

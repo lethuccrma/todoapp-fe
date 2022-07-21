@@ -20,6 +20,7 @@ export const UserSlice = createSlice({
     setUser: (state, action: PayloadAction<IUser>) => (action.payload),
     updateAvatarURL: (state, action: PayloadAction<UploadFile>) => ({...state, avatarURL: action.payload.url}),
     updateUser: (state, action: PayloadAction<IUser>) => ({...state, ...action.payload}),
+    resetUser: () => (initialState),
   },
 });
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useCallback, useState } from 'react';
-import { Button, Empty, Input, Pagination } from 'antd';
+import { Avatar, Button, Dropdown, Empty, Image, Input, Menu, Pagination } from 'antd';
 import _ from 'lodash';
 import { CardStatus, ICardData } from '../../types/ICard';
 import useTodos from './hook';
@@ -8,6 +8,10 @@ import TodoCard from '../../components/TodoCard';
 import TodoModal, { ICardForm } from '../../components/TodoModal';
 import AuthorizedAPI from '../../apis/authorized';
 import { ADD_TODO, DELETE_TODO, EDIT_TODO } from '../../configs/server';
+import { useSelector } from 'react-redux';
+import IUser from '../../types/IUser';
+import { useDispatch } from 'react-redux';
+import { LOGOUT } from '../../redux/auth/auth.saga';
 
 const { Search } = Input;
 
@@ -37,6 +41,8 @@ function TodoList() {
   const [requesting, setRequesting] = useState(false);
   const [requestError, setRequestError] = useState('');
   const [editedTodo, setEditedTodo] = useState<ICardData>();
+  const userState = useSelector<{user: IUser}, IUser>((state) => state.user);
+  const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const pageSize = 12;
 
@@ -136,12 +142,34 @@ function TodoList() {
   };
   const debounceSearch = useCallback(_.debounce(search, 500), []);
 
+  const handleLogout = () => {
+    dispatch(LOGOUT());
+  }
+
+  const menu = (
+    <Menu
+      items={[
+        {
+          label: <a className='mx-5' href="/user">Profile</a>,
+          key: '0',
+        },
+        {
+          label: <div onClick={handleLogout} className='mx-5'>Logout</div>,
+          key: '1',
+        },
+      ]}
+    />
+  );
+
   return (
     <div className="flex flex-col items-center py-5">
+      <Dropdown overlay={menu} trigger={['click']} className="absolute top-5 right-5" >
+        <a onClick={e => e.preventDefault()}>
+          <Avatar src={userState.avatarURL || "https://joeschmoe.io/api/v1/random"} size={50} />
+        </a>
+      </Dropdown>
       <Search
-        style={{
-          width: '500px',
-        }}
+        className='w-2/4'
         placeholder="Wanna search something for your boring life?"
         onSearch={search}
         onChange={(event: any) => debounceSearch(event.target.value)}
