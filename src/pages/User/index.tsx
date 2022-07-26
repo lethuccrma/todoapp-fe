@@ -34,7 +34,7 @@ import IUser from '../../types/IUser';
 import AuthorizedAPI from '../../apis/authorized';
 import { useDispatch } from 'react-redux';
 import Password from 'antd/lib/input/Password';
-import { UploadOutlined } from '@ant-design/icons';
+import { UploadOutlined, HomeFilled } from '@ant-design/icons';
 import { RcFile, UploadFile } from 'antd/lib/upload/interface';
 
 function ChangePasswordModal(props: {
@@ -212,10 +212,8 @@ function EditInfoModal(props: {
 
         const userInfo = {
           ...res.data.user,
-          avatarURL: `${ROOT_ENDPOINT}${GET_FILE}/${
-            res.data.user.avatar
-          }?token=Bearer ${authState.token}`,
-        }
+          avatarURL: `${ROOT_ENDPOINT}${GET_FILE}/${res.data.user.avatar}?token=Bearer ${authState.token}`,
+        };
 
         dispatch(UserSlice.actions.setUser(userInfo));
 
@@ -315,10 +313,8 @@ export default function index() {
         setErrorText('');
         const userInfo = {
           ...res.data.user,
-          avatarURL: `${ROOT_ENDPOINT}${GET_FILE}/${
-            res.data.user.avatar
-          }?token=Bearer ${authState.token}`,
-        }
+          avatarURL: `${ROOT_ENDPOINT}${GET_FILE}/${res.data.user.avatar}?token=Bearer ${authState.token}`,
+        };
         dispatch(UserSlice.actions.setUser(userInfo));
       })
       .catch((err) => {
@@ -357,126 +353,141 @@ export default function index() {
 
   useEffect(() => {
     form.resetFields();
-  }, [userState])
+  }, [userState]);
 
   return (
-    <div className="flex flex-col h-screen w-screen justify-center items-center">
-      {onChangingPassword ? (
-        <ChangePasswordModal
-          onChangingPassword={onChangingPassword}
-          setOnChangingPassword={setOnChangingPassword}
-        />
-      ) : null}
-      {onEditingInfo ? (
-        <EditInfoModal
-          onEditingInfo={onEditingInfo}
-          setOnEditingInfo={setOnEditingInfo}
-          oldFirstName={userState.firstName || ''}
-          oldLastName={userState.lastName || ''}
-        />
-      ) : null}
-      <ImageAnt
-        className="mb-4"
-        width={200}
-        src={userState.avatarURL}
-        fallback={require('./BlankImage.png')}
-        placeholder={
+    <div className="flex flex-col h-screen w-screen justify-center">
+      <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center relative">
+          <div className='absolute' style={{left: 0, top: -40}}>
+            <a href='/' className='text-4xl'>
+              <HomeFilled />
+            </a>
+          </div>
+          {onChangingPassword ? (
+            <ChangePasswordModal
+              onChangingPassword={onChangingPassword}
+              setOnChangingPassword={setOnChangingPassword}
+            />
+          ) : null}
+          {onEditingInfo ? (
+            <EditInfoModal
+              onEditingInfo={onEditingInfo}
+              setOnEditingInfo={setOnEditingInfo}
+              oldFirstName={userState.firstName || ''}
+              oldLastName={userState.lastName || ''}
+            />
+          ) : null}
           <ImageAnt
-            preview={false}
-            src={require('./BlankImage.png')}
+            className="mb-4"
             width={200}
+            height={200}
+            src={userState.avatarURL}
+            fallback={require('./BlankImage.png')}
+            placeholder={
+              <ImageAnt
+                preview={false}
+                src={require('./BlankImage.png')}
+                width={200}
+                height={200}
+              />
+            }
           />
-        }
-      />
-      <Row className="mb-8">
-        <Col span={8}>
-          <ImgCrop rotate>
-            <Upload {...ChangeAvatarProps}>
-              <Button icon={<UploadOutlined />}>Change Avatar</Button>
-            </Upload>
-          </ImgCrop>
-        </Col>
-      </Row>
-      <Form
-        form={form}
-        name="UserInfo"
-        initialValues={{
-          firstName: userState.firstName,
-          lastName: userState.lastName,
-          email: userState.email,
-          createdAt: moment(userState.createdAt).format('DD/MM/YYYY HH:mm:ss'),
-          updatedAt: moment(userState.updatedAt).format('DD/MM/YYYY HH:mm:ss'),
-        }}
-        scrollToFirstError
-        className="info-form min-w-[40%]"
-      >
-        <Row gutter={24}>
-          <Col span={12}>
-            <Typography>First name:</Typography>
-            <Form.Item name="firstName">
-              <Input disabled placeholder="First Name" />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Typography>Last name:</Typography>
-            <Form.Item name="lastName">
-              <Input disabled placeholder="Last Name" />
-            </Form.Item>
-          </Col>
-        </Row>
+          <Row className="mb-8 mt-4">
+            <Col span={8}>
+              <ImgCrop rotate>
+                <Upload {...ChangeAvatarProps}>
+                  <Button icon={<UploadOutlined />}>Change Avatar</Button>
+                </Upload>
+              </ImgCrop>
+            </Col>
+          </Row>
+          <Form
+            form={form}
+            name="UserInfo"
+            initialValues={{
+              firstName: userState.firstName,
+              lastName: userState.lastName,
+              email: userState.email,
+              createdAt: moment(userState.createdAt).format(
+                'DD/MM/YYYY HH:mm:ss',
+              ),
+              updatedAt: moment(userState.updatedAt).format(
+                'DD/MM/YYYY HH:mm:ss',
+              ),
+            }}
+            scrollToFirstError
+            className="info-form min-w-[40%]"
+          >
+            <Row gutter={24}>
+              <Col span={12}>
+                <Typography>First name:</Typography>
+                <Form.Item name="firstName">
+                  <Input disabled placeholder="First Name" />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Typography>Last name:</Typography>
+                <Form.Item name="lastName">
+                  <Input disabled placeholder="Last Name" />
+                </Form.Item>
+              </Col>
+            </Row>
 
-        <Row gutter={24}>
-          <Col span={24}>
-            <Typography>Email:</Typography>
-            <Form.Item name="email">
-              <Input disabled placeholder="Email" />
-            </Form.Item>
-          </Col>
-        </Row>
+            <Row gutter={24}>
+              <Col span={24}>
+                <Typography>Email:</Typography>
+                <Form.Item name="email">
+                  <Input disabled placeholder="Email" />
+                </Form.Item>
+              </Col>
+            </Row>
 
-        <Row gutter={24}>
-          <Col span={24}>
-            <Typography>Created at:</Typography>
-            <Form.Item name="createdAt">
-              <Input disabled />
-            </Form.Item>
-          </Col>
-        </Row>
+            <Row gutter={24}>
+              <Col span={24}>
+                <Typography>Created at:</Typography>
+                <Form.Item name="createdAt">
+                  <Input disabled />
+                </Form.Item>
+              </Col>
+            </Row>
 
-        <Row gutter={24}>
-          <Col span={24}>
-            <Typography>Updated at:</Typography>
-            <Form.Item name="updatedAt">
-              <Input disabled />
-            </Form.Item>
-          </Col>
-        </Row>
+            <Row gutter={24}>
+              <Col span={24}>
+                <Typography>Updated at:</Typography>
+                <Form.Item name="updatedAt">
+                  <Input disabled />
+                </Form.Item>
+              </Col>
+            </Row>
 
-        <Row>
-          <Col span={8}>
-            <Form.Item>
-              <Button
-                type="primary"
-                block
-                onClick={() => setOnChangingPassword(true)}
-              >
-                Change password
-              </Button>
-            </Form.Item>
-          </Col>
-          <Col span={8} offset={8}>
-            <Form.Item>
-              <Button
-                type="primary"
-                block
-                onClick={() => setOnEditingInfo(true)}
-              >
-                Edit Information
-              </Button>
-            </Form.Item>
-          </Col>
-        </Row>
-      </Form>
+            <Row>
+              <Col span={8}>
+                <Form.Item>
+                  <Button
+                    type="primary"
+                    block
+                    onClick={() => setOnChangingPassword(true)}
+                  >
+                    Change password
+                  </Button>
+                </Form.Item>
+              </Col>
+              <Col span={8} offset={8}>
+                <Form.Item>
+                  <Button
+                    type="primary"
+                    block
+                    onClick={() => setOnEditingInfo(true)}
+                  >
+                    Edit Information
+                  </Button>
+                </Form.Item>
+              </Col>
+            </Row>
+          </Form>
+        </div>
+      </div>
     </div>
   );
 }
