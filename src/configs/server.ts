@@ -1,4 +1,4 @@
-export const ROOT_ENDPOINT = 'http://localhost:3001';
+export const ROOT_ENDPOINT = 'https://ca-sea-todoapp-duong.azurewebsites.net';
 
 export const LOGIN = '/auth/login';
 export const SIGNUP = '/auth/signup';
