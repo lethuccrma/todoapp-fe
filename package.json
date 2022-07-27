@@ -27,6 +27,7 @@
     "antd-img-crop": "^4.2.3",
     "autoprefixer": "^10.4.7",
     "axios": "^0.27.2",
+    "env-cmd": "^10.1.0",
     "eslint-config-airbnb": "^19.0.4",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
@@ -50,7 +51,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "CI=false env-cmd -f \".env\" react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

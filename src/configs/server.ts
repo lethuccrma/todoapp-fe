@@ -1,4 +1,4 @@
-export const ROOT_ENDPOINT = 'http://localhost:3001';
+export const ROOT_ENDPOINT = process.env.REACT_APP_SERVER_ENDPOINT || 'http://localhost:3001';
 
 export const LOGIN = '/auth/login';
 export const SIGNUP = '/auth/signup';

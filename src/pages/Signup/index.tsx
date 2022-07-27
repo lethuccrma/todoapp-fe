@@ -155,6 +155,7 @@ export default function index() {
           >
             Sign up
           </Button>
+          Or <a href="/login">log in!</a>
         </Form.Item>
       </Form>
     </div>
