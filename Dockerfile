@@ -1,19 +1,32 @@
-FROM node:alpine
+# Multi-stage
+# 1) Node image for building frontend assets
+# 2) nginx stage to serve frontend assets
+FROM node:14-alpine AS build
 
-ARG PORT
+ARG ENV
 
-RUN mkdir -p /usr/src/node-app && chown -R node:node /usr/src/node-app
+# Set working directory
+WORKDIR /app
 
-WORKDIR /usr/src/node-app
+ENV NODE_ENV=$ENV
 
-COPY package.json yarn.lock ./
+# Copy all files from current directory to working dir in image
+COPY . .
+# install node modules
+RUN yarn install
+# Build 
+RUN yarn build
 
-USER node
+# nginx state for serving content
+FROM nginx:stable-alpine
+# Set working directory to nginx asset directory
+WORKDIR /usr/share/nginx/html
+# Remove default nginx static assets
+RUN rm -rf ./*
 
-RUN yarn install --pure-lockfile
-
-COPY --chown=node:node . .
-
-EXPOSE $PORT
-
-CMD yarn start
+# Copy build
+COPY --from=build /app/build .
+COPY --from=build /app/nginx/nginx.conf /etc/nginx/conf.d/default.conf
+# Containers run nginx with global directives and daemon off
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
