@@ -1,0 +1,80 @@
+name: CI
+on:
+  pull_request:
+    branches:
+    - develop
+
+jobs:
+  test:
+    name: Unit testing
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - name: Setup env
+        run: |
+          cat <<EOT >> ./.staging.env
+            REACT_APP_SERVER_ENDPOINT=http://localhost:3001
+          EOT
+          cat ./.staging.env
+      - name: Setup packages
+        run: |
+          yarn
+      - name: Run test cases
+        run: |
+          yarn test
+
+  dependency-check:
+    name: Dependency check
+    needs: static-code-analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Setup packages
+        run: |
+          yarn
+      - name: Check dependencies
+        run: |
+          npx depcheck
+  
+  secret-scan:
+    name: Secret scan
+    needs: dependency-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  container-scan:
+    name: Container scan
+    needs: secret-scan
+    runs-on: ubuntu-latest
+    env:
+      DOCKLE_HOST: "unix:///var/run/docker.sock"
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - name: Setup env
+        run: |
+          cat <<EOT >> ./.staging.env
+            REACT_APP_SERVER_ENDPOINT=http://localhost:3001
+          EOT
+          cat ./.staging.env
+      - name: Build image with docker
+        run: |
+          docker build --tag todofe --build-arg NODE_ENV=staging . 
+      - uses: Azure/container-scan@v0
+        with:
+          image-name: todofe:latest
