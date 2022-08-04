@@ -74,7 +74,7 @@ jobs:
           cat ./.staging.env
       - name: Build image with docker
         run: |
-          docker build --tag todofe --build-arg NODE_ENV=staging . 
+          docker build --tag todofe --build-arg ENV=staging . 
       - uses: Azure/container-scan@v0
         with:
           image-name: todofe:latest
