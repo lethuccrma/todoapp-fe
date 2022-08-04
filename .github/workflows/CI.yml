@@ -24,7 +24,7 @@ jobs:
           yarn
       - name: Run test cases
         run: |
-          yarn test
+          yarn test --watchAll=false
 
   dependency-check:
     name: Dependency check

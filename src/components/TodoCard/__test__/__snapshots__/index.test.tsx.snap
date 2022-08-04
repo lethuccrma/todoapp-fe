@@ -36,7 +36,7 @@ exports[`<TodoCard /> should render and match the snapshot 1`] = `
   <TodoCard
     categories=""
     content="Content"
-    dueDate={1999-08-01T17:00:00.000Z}
+    dueDate={1999-08-02T00:00:00.000Z}
     onCompleteClick={[Function]}
     onDeleteClick={[Function]}
     onEditClick={[Function]}

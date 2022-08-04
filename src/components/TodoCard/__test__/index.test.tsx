@@ -16,7 +16,7 @@ describe('<TodoCard />', () => {
           content="Content"
           categories=""
           status={CardStatus.OPEN}
-          dueDate={new Date('8/2/1999')}
+          dueDate={new Date('1999-08-02T00:00:00.000Z')}
           onCompleteClick={() => {
             console.log('complete');
           }}
