@@ -1,5 +1,4 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
-import FormData from 'form-data';
 
 import UserSlice from './user.slice';
 import AuthorizedAPI from '../../apis/authorized';
