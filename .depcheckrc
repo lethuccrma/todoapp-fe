@@ -5,7 +5,6 @@ ignores:
     'eslint-*',
     'tailwindcss',
     'autoprefixer',
-    '@testing-*',
     '@types/jest',
     'postcss'
   ]
