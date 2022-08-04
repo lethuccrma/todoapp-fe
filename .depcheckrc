@@ -1,0 +1,11 @@
+ignores:
+  [
+    'depcheck',
+    'eslint',
+    'eslint-*',
+    'tailwindcss',
+    'autoprefixer',
+    '@types/jest',
+    'postcss'
+  ]
+skip-missing: true
